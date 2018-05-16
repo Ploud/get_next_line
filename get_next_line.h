@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:30 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/16 17:28:15 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/16 18:00:47 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct		s_data
 	struct s_data	*next;
 }					t_data;
 
-void				ft_free(int fd, t_data *l);
+void				ft_free(int fd, t_data **l);
 int					ft_read_buf(int flag, char *buf, t_data *p);
 int					ft_reader(const int fd, t_data *p);
 t_data				*ft_set_p(const int fd, t_data **l);

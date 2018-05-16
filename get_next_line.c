@@ -6,32 +6,33 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:13 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/16 17:28:40 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/16 18:46:04 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-void	ft_free(int fd, t_data *l)
+void	ft_free(int fd, t_data **l)
 {
 	t_data	*p;
 	t_data	*f;
 	int		i;
 
-	p = l;
-	f = l;
+	p = *l;
+	f = *l;
 	i = 0;
-	while (p->index != fd && ++i)
+	while (p->index != fd)
+	{
+		f = p;
 		p = p->next;
-	while (--i > 0)
-		f = f->next;
+	}
 	f->next = p->next;
 	free(p->tmp);
 	p->tmp = NULL;
 	free(p);
 	p = NULL;
-	printf("free effectué\n");
+	//printf("free effectué\n");
 }
 
 int		ft_read_buf(int flag, char *buf, t_data *p)
@@ -87,7 +88,7 @@ int		ft_reader(const int fd, t_data *p)
 		buf[len] = 0;
 		flag = ft_read_buf(flag, buf, p);
 	}
-	return (len > 0);
+	return ((len));
 }
 
 t_data	*ft_set_p(const int fd, t_data **l)
@@ -95,28 +96,27 @@ t_data	*ft_set_p(const int fd, t_data **l)
 	t_data	*p;
 
 	p = NULL;
-	while (*l && (*l)->index != fd)
+	while ((*l) && (*l)->index != fd)
 	{
-		p = *l;
-		*l = (*l)->next;
+		p = (*l);
+		(*l) = (*l)->next;
 	}
-	if (!*l)
+	if (!(*l))
 	{
-		printf("creation chainon\n");
-		if (!(*l = malloc(sizeof(t_data))))
+		//printf("creation chainon\n");
+		if (!((*l) = malloc(sizeof(t_data))))
 			return (NULL);
 		(*l)->index = fd;
 		if (!((*l)->line = malloc(sizeof(char) * (BUFF_SIZE + 1))))
 			return (NULL);
 		if (!((*l)->tmp = malloc(sizeof(char) * (BUFF_SIZE + 1))))
 			return (NULL);
-		ft_bzero((*l)->line, BUFF_SIZE + 1);
 		ft_bzero((*l)->tmp, BUFF_SIZE + 1);
 		(*l)->next = NULL;
 		if (p)
-			p->next = *l;
+			p->next = (*l);
 	}
-	return (*l);
+	return ((*l));
 }
 
 int		get_next_line(const int fd, char **line)
@@ -125,37 +125,34 @@ int		get_next_line(const int fd, char **line)
 	t_data			*p;
 	int				state;
 
-	p = l;
-	if (!(p = ft_set_p(fd, &p)))
+	if (!(p = ft_set_p(fd, &l)))
 		return (-1);
-	printf("set ok\n");
 	ft_bzero(p->line, BUFF_SIZE + 1);
-	printf("b_zero ok\n");
 	state = ft_reader(fd, p);
-	printf("state ok = %d\n", state);
 	*line = p->line;
 	if (!state)
-		ft_free(fd, l);
+		ft_free(fd, &l);
 	return (state);
 }
 
 int	main(int argc, char **argv)
 {
 	int fd;
-	//int fd2;
+	int fd2;
 	int check;
 	char *line;
 
 	(void)argc;
 	fd = open(argv[1], O_RDONLY);
-	check = get_next_line(fd, &line);
-		printf("%s  %d\n\n", line, check);
-	check = get_next_line(fd, &line);
-/*printf("%s  %d\n", line, check);
-	check = get_next_line(fd, &line);
-	printf("%s  %d\n", line, check);
-
 	fd2 = open(argv[2], O_RDONLY);
+
+	check = get_next_line(fd, &line);
+	printf("%s\n", line);
+	check = get_next_line(fd, &line);
+	printf("%s\n", line);
+	check = get_next_line(fd, &line);
+	printf("%s\n\n\n", line);
+
 	check = get_next_line(fd2, &line);
 	printf("%s\n", line);
 	check = get_next_line(fd2, &line);
@@ -167,9 +164,9 @@ int	main(int argc, char **argv)
 	printf("%s\n", line);
 	check = get_next_line(fd, &line);
 	printf("%s\n", line);
-	//check = get_next_line(fd, &line);
-	//printf("%s\n", line);
 	check = get_next_line(fd, &line);
-	printf("%s\n\n\n", line);*/
+	printf("%s\n", line);
+	check = get_next_line(fd, &line);
+	printf("%s\n\n\n", line);
 	return (0);
 }
