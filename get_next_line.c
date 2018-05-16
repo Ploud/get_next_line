@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:13 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/16 17:02:25 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/16 17:28:40 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int		ft_reader(const int fd, t_data *p)
 		}
 		i++;
 	}
-	printf("ok?\n");
 	while (flag < 0 && (len = read(fd, buf, BUFF_SIZE)))
 	{
 		if (len == -1)
@@ -122,11 +121,12 @@ t_data	*ft_set_p(const int fd, t_data **l)
 
 int		get_next_line(const int fd, char **line)
 {
-	static t_data	*l;
+	static t_data	*l = NULL;
 	t_data			*p;
 	int				state;
 
-	if (!(p = ft_set_p(fd, &l)))
+	p = l;
+	if (!(p = ft_set_p(fd, &p)))
 		return (-1);
 	printf("set ok\n");
 	ft_bzero(p->line, BUFF_SIZE + 1);
