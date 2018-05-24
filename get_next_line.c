@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:13 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/16 18:46:04 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/24 19:50:00 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,53 +15,50 @@
 
 void	ft_free(int fd, t_data **l)
 {
-	t_data	*p;
 	t_data	*f;
-	int		i;
 
-	p = *l;
 	f = *l;
-	i = 0;
-	while (p->index != fd)
+	if ((*l)->index == fd)
 	{
-		f = p;
-		p = p->next;
+		*l = (*l)->next;
+		ft_strdel(&(f->tmp));
+		ft_strdel(&(f->line));
+		free(f);
 	}
-	f->next = p->next;
-	free(p->tmp);
-	p->tmp = NULL;
-	free(p);
-	p = NULL;
-	//printf("free effectué\n");
+	else
+		ft_free(fd, &(*l)->next);
 }
 
-int		ft_read_buf(int flag, char *buf, t_data *p)
+int		ft_read_buf(int flag, char *buf, t_data **p)
 {
 	int		i;
 	char	*link;
 
 	i = 0;
-	link = p->line;
+	link = (*p)->line;
 	while (buf[i])
 	{
-		p->tmp[i] = buf[i];
+		(*p)->tmp[i] = buf[i];
 		if (flag < 0 && buf[i] == '\n')
 		{
-			p->tmp[i] = 0;
-			p->line = ft_strjoin(p->line, p->tmp);
+			(*p)->tmp[i] = 0;
+			if (!(link = ft_strjoin((*p)->line, (*p)->tmp)))
+				return (-1);
 			flag = i;
 		}
 		i++;
 	}
-	if (flag < 0)
-		p->line = ft_strjoin(p->line, p->tmp);
+	(*p)->tmp[i] = 0;
+	if (flag < 0 && buf[0])
+		link = ft_strjoin((*p)->line, (*p)->tmp);
 	else
-		ft_memcpy(p->tmp, p->tmp + flag + 1, BUFF_SIZE - flag + 1);
-	free(link);
+		ft_memcpy((*p)->tmp, (*p)->tmp + flag + 1, BUFF_SIZE - flag);
+	//ft_strdel(&(p)->line);
+	(*p)->line = link;
 	return (flag);
 }
 
-int		ft_reader(const int fd, t_data *p)
+int		ft_reader(const int fd, t_data **p)
 {
 	int		i;
 	int		flag;
@@ -70,13 +67,14 @@ int		ft_reader(const int fd, t_data *p)
 
 	i = 0;
 	flag = -1;
-	while (p->tmp[i])
+	while ((*p)->tmp[i])
 	{
-		p->line[i] = p->tmp[i];
-		if (p->tmp[i] == '\n')
+		(*p)->line[i] = (*p)->tmp[i];
+		(*p)->tmp[i] = 0;
+		if ((*p)->line[i] == '\n')
 		{
-			p->line[i] = 0;
-			ft_memcpy(p->tmp, p->tmp + i + 1, BUFF_SIZE - i + 1);
+			(*p)->line[i] = 0;
+			ft_memcpy((*p)->tmp, (*p)->tmp + i + 1, BUFF_SIZE - i);
 			return (1);
 		}
 		i++;
@@ -88,85 +86,52 @@ int		ft_reader(const int fd, t_data *p)
 		buf[len] = 0;
 		flag = ft_read_buf(flag, buf, p);
 	}
-	return ((len));
+	return (len > 0);
 }
 
 t_data	*ft_set_p(const int fd, t_data **l)
 {
-	t_data	*p;
-
-	p = NULL;
-	while ((*l) && (*l)->index != fd)
+	if ((*l) && (*l)->index != fd)
+		return (ft_set_p(fd, &(*l)->next));
+	else
 	{
-		p = (*l);
-		(*l) = (*l)->next;
+		if (!(*l))
+		{
+			printf("%d est cree\n", fd);
+			if (!((*l) = malloc(sizeof(t_data))))
+				return (NULL);
+			(*l)->index = fd;
+			if (!((*l)->line = malloc(sizeof(char) * (BUFF_SIZE + 1))))
+				return (NULL);
+			if (!((*l)->tmp = malloc(sizeof(char) * (BUFF_SIZE + 1))))
+				return (NULL);
+			ft_bzero((*l)->tmp, BUFF_SIZE + 1);
+			(*l)->next = NULL;
+		}
+		return ((*l));
 	}
-	if (!(*l))
-	{
-		//printf("creation chainon\n");
-		if (!((*l) = malloc(sizeof(t_data))))
-			return (NULL);
-		(*l)->index = fd;
-		if (!((*l)->line = malloc(sizeof(char) * (BUFF_SIZE + 1))))
-			return (NULL);
-		if (!((*l)->tmp = malloc(sizeof(char) * (BUFF_SIZE + 1))))
-			return (NULL);
-		ft_bzero((*l)->tmp, BUFF_SIZE + 1);
-		(*l)->next = NULL;
-		if (p)
-			p->next = (*l);
-	}
-	return ((*l));
 }
 
 int		get_next_line(const int fd, char **line)
 {
-	static t_data	*l = NULL;
+	static t_data	*l;
 	t_data			*p;
 	int				state;
 
 	if (!(p = ft_set_p(fd, &l)))
 		return (-1);
+	printf("l = %d et p = %d\n", l->index, p->index);
 	ft_bzero(p->line, BUFF_SIZE + 1);
-	state = ft_reader(fd, p);
-	*line = p->line;
+	if ((state = ft_reader(fd, &p)) == -1)
+		return (-1);
+	*line = NULL;
+	if (p->line[0] || state != 0)
+		*line = ft_strdup(p->line);
+	//printf("%d\n", state);
 	if (!state)
+	{
 		ft_free(fd, &l);
-	return (state);
-}
-
-int	main(int argc, char **argv)
-{
-	int fd;
-	int fd2;
-	int check;
-	char *line;
-
-	(void)argc;
-	fd = open(argv[1], O_RDONLY);
-	fd2 = open(argv[2], O_RDONLY);
-
-	check = get_next_line(fd, &line);
-	printf("%s\n", line);
-	check = get_next_line(fd, &line);
-	printf("%s\n", line);
-	check = get_next_line(fd, &line);
-	printf("%s\n\n\n", line);
-
-	check = get_next_line(fd2, &line);
-	printf("%s\n", line);
-	check = get_next_line(fd2, &line);
-	printf("%s\n", line);
-	check = get_next_line(fd2, &line);
-	printf("%s\n\n\n", line);
-
-	check = get_next_line(fd, &line);
-	printf("%s\n", line);
-	check = get_next_line(fd, &line);
-	printf("%s\n", line);
-	check = get_next_line(fd, &line);
-	printf("%s\n", line);
-	check = get_next_line(fd, &line);
-	printf("%s\n\n\n", line);
-	return (0);
+		printf("%d est free\n", fd);
+	}
+	return (*line != NULL || state != 0);
 }

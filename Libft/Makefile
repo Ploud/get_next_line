@@ -6,7 +6,7 @@
 #    By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/12 19:05:44 by jsobel            #+#    #+#              #
-#    Updated: 2018/04/18 15:23:05 by jsobel           ###   ########.fr        #
+#    Updated: 2018/05/24 17:40:30 by jsobel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,16 +25,14 @@ ft_putstr.c ft_putendl.c ft_putnbr.c ft_putchar_fd.c ft_putstr_fd.c\
 ft_putendl_fd.c ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c\
 ft_lstadd.c ft_lstiter.c ft_lstmap.c
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(addprefix src/, $(SRC:.c=.o))
 
-HEAD = -I libft.h
-
-FLAG = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
+CFLAGS += -Iincludes
 
 all: $(NAME)
 
-$(NAME):
-	@gcc $(FLAG) $(HEAD) -c $(SRC)
+$(NAME): $(OBJ)
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
 

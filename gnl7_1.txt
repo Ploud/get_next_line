@@ -1,0 +1,54 @@
+t_data	*ft_set_p(const int fd, t_data **l)
+{
+	t_data *node;
+
+	node = *l;
+	if (node && node->index != fd && node->next)
+		return (ft_set_p(fd, &(node->next)));
+	else if (node && node->index != fd)
+	{
+		node->next = ft_set_p(fd, &(node->next));
+		return (node->next);
+	}
+	else
+	{
+		if (node)
+			return (node);
+		if (!(node = malloc(sizeof(t_data))))
+			return (NULL);
+		node->index = fd;
+		if (!(node->line = malloc(sizeof(char) * (BUFF_SIZE + 1))))
+			return (NULL);
+		if (!(node->tmp = malloc(sizeof(char) * (BUFF_SIZE + 1))))
+			return (NULL);
+		ft_bzero(node->tmp, BUFF_SIZE + 1);
+		node->next = NULL;
+		return (node);
+	}
+}
+
+save 1
+
+
+t_data	*ft_set_p(const int fd, t_data **l)
+{
+	if ((*l) && (*l)->index != fd)
+		return (ft_set_p(fd, &(*l)->next));
+	else
+	{
+		if (!(*l))
+		{
+			printf("%d est cree\n", fd);
+			if (!((*l) = malloc(sizeof(t_data))))
+				return (NULL);
+			(*l)->index = fd;
+			if (!((*l)->line = malloc(sizeof(char) * (BUFF_SIZE + 1))))
+				return (NULL);
+			if (!((*l)->tmp = malloc(sizeof(char) * (BUFF_SIZE + 1))))
+				return (NULL);
+			ft_bzero((*l)->tmp, BUFF_SIZE + 1);
+			(*l)->next = NULL;
+		}
+		return ((*l));
+	}
+}
