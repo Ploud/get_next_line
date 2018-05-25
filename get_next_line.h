@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:30 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/24 19:14:01 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/25 17:41:13 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/stat.h>
 # include "libft.h"
 
-# define BUFF_SIZE 100
+# define BUFF_SIZE 30
 
 typedef struct		s_data
 {

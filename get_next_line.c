@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:13 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/24 19:50:00 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/25 17:41:06 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		ft_read_buf(int flag, char *buf, t_data **p)
 		link = ft_strjoin((*p)->line, (*p)->tmp);
 	else
 		ft_memcpy((*p)->tmp, (*p)->tmp + flag + 1, BUFF_SIZE - flag);
-	//ft_strdel(&(p)->line);
+	ft_strdel(&((*p)->line));
 	(*p)->line = link;
 	return (flag);
 }
@@ -97,7 +97,7 @@ t_data	*ft_set_p(const int fd, t_data **l)
 	{
 		if (!(*l))
 		{
-			printf("%d est cree\n", fd);
+			//printf("%d est cree\n", fd);
 			if (!((*l) = malloc(sizeof(t_data))))
 				return (NULL);
 			(*l)->index = fd;
@@ -114,13 +114,16 @@ t_data	*ft_set_p(const int fd, t_data **l)
 
 int		get_next_line(const int fd, char **line)
 {
-	static t_data	*l;
+	static t_data	*l = NULL;
 	t_data			*p;
 	int				state;
 
 	if (!(p = ft_set_p(fd, &l)))
+	{
+		//printf("On a un probleme\n");
 		return (-1);
-	printf("l = %d et p = %d\n", l->index, p->index);
+	}
+	//printf("l = %d et p = %d\n", l->index, p->index);
 	ft_bzero(p->line, BUFF_SIZE + 1);
 	if ((state = ft_reader(fd, &p)) == -1)
 		return (-1);
@@ -131,7 +134,8 @@ int		get_next_line(const int fd, char **line)
 	if (!state)
 	{
 		ft_free(fd, &l);
-		printf("%d est free\n", fd);
+		//printf("%d est free\n", fd);
 	}
+	//printf("A la fin index = %d\n", p->index);
 	return (*line != NULL || state != 0);
 }

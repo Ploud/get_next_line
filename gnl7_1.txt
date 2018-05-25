@@ -52,3 +52,32 @@ t_data	*ft_set_p(const int fd, t_data **l)
 		return ((*l));
 	}
 }
+
+t_data	*ft_set_p(const int fd, t_data **l)
+{
+	t_data	*node;
+
+	if ((*l) && (*l)->index != fd)
+	{
+		printf("Au suivant, index = %d et on cherche fd = %d\n", (*l)->index, fd);
+		return (ft_set_p(fd, &(*l)->next));
+	}
+	else
+	{
+		if (!(*l))
+		{
+			printf("%d est cree\n", fd);
+			if (!(node = malloc(sizeof(t_data))))
+				return (NULL);
+			node->index = fd;
+			if (!(node->line = malloc(sizeof(char) * (BUFF_SIZE + 1))))
+				return (NULL);
+			if (!(node->tmp = malloc(sizeof(char) * (BUFF_SIZE + 1))))
+				return (NULL);
+			ft_bzero(node->tmp, BUFF_SIZE + 1);
+			node->next = NULL;
+			*l = node;
+		}
+		return ((*l));
+	}
+}

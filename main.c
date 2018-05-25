@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 17:26:42 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/24 18:33:30 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/25 16:55:36 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,30 @@ int	main(int argc, char **argv)
 	fd2 = open(argv[2], O_RDONLY);
 	fd3 = open(argv[3], O_RDONLY);
 
+	check = get_next_line(fd, &line);
+	printf("%s\n", line);
+	//free(line);
+	//line = NULL;
+	check = get_next_line(fd2, &line);
+	printf("%s\n", line);
+	//free(line);
+	//line = NULL;
+	check = get_next_line(fd3, &line);
+	printf("%s\n\n", line);
+	//free(line);
+	//line = NULL;
+	check = get_next_line(fd, &line);
+	printf("%s\n", line);
+	//free(line);
+	//line = NULL;
+	check = get_next_line(fd2, &line);
+	printf("%s\n", line);
+	//free(line);
+	//line = NULL;
+	check = get_next_line(fd3, &line);
+	printf("%s\n\n", line);
+	//free(line);
+	//line = NULL;
 	check = get_next_line(fd, &line);
 	printf("%s\n", line);
 	//free(line);
