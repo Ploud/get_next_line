@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:13 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/25 17:41:06 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/28 19:12:16 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int		ft_reader(const int fd, t_data **p)
 	int		len;
 	char	buf[BUFF_SIZE + 1];
 
-	i = 0;
+	i = -1;
 	flag = -1;
-	while ((*p)->tmp[i])
+	while ((*p)->tmp[++i])
 	{
 		(*p)->line[i] = (*p)->tmp[i];
 		(*p)->tmp[i] = 0;
@@ -77,7 +77,6 @@ int		ft_reader(const int fd, t_data **p)
 			ft_memcpy((*p)->tmp, (*p)->tmp + i + 1, BUFF_SIZE - i);
 			return (1);
 		}
-		i++;
 	}
 	while (flag < 0 && (len = read(fd, buf, BUFF_SIZE)))
 	{
@@ -97,7 +96,6 @@ t_data	*ft_set_p(const int fd, t_data **l)
 	{
 		if (!(*l))
 		{
-			//printf("%d est cree\n", fd);
 			if (!((*l) = malloc(sizeof(t_data))))
 				return (NULL);
 			(*l)->index = fd;
@@ -119,23 +117,14 @@ int		get_next_line(const int fd, char **line)
 	int				state;
 
 	if (!(p = ft_set_p(fd, &l)))
-	{
-		//printf("On a un probleme\n");
 		return (-1);
-	}
-	//printf("l = %d et p = %d\n", l->index, p->index);
-	ft_bzero(p->line, BUFF_SIZE + 1);
+	ft_bzero(p->line, ft_strlen(p->line) + 1);
 	if ((state = ft_reader(fd, &p)) == -1)
 		return (-1);
 	*line = NULL;
 	if (p->line[0] || state != 0)
 		*line = ft_strdup(p->line);
-	//printf("%d\n", state);
 	if (!state)
-	{
 		ft_free(fd, &l);
-		//printf("%d est free\n", fd);
-	}
-	//printf("A la fin index = %d\n", p->index);
 	return (*line != NULL || state != 0);
 }

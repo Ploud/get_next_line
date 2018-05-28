@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 17:26:42 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/25 16:55:36 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/28 19:00:25 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,69 +196,69 @@ int	main(int argc, char **argv)
 	fd2 = open(argv[2], O_RDONLY);
 	fd3 = open(argv[3], O_RDONLY);
 
-	check = get_next_line(fd, &line);
+	/*check = get_next_line(fd, &line);
 	printf("%s\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd2, &line);
 	printf("%s\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd3, &line);
 	printf("%s\n\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd, &line);
 	printf("%s\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd2, &line);
 	printf("%s\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd3, &line);
 	printf("%s\n\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd, &line);
 	printf("%s\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd2, &line);
 	printf("%s\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd3, &line);
 	printf("%s\n\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd, &line);
 	printf("%s\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd2, &line);
 	printf("%s\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 	check = get_next_line(fd3, &line);
 	printf("%s\n\n", line);
-	//free(line);
-	//line = NULL;
+	free(line);
+	line = NULL;
 
-	/*while ((check = get_next_line(fd2, &line)))
+	while ((check = get_next_line(fd2, &line)))
 	{
 		printf("%s %d\n", line, check);
 		//free(line);
 		//line = NULL;
 	}
-	printf("\n\n");
+	printf("\n\n");*/
 
 	while ((check = get_next_line(fd, &line)))
 	{
 		printf("%s %d\n", line, check);
 		//free(line);
 		//line = NULL;
-	}*/
+	}
 	close(fd);
 	close(fd2);
 	close(fd3);
