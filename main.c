@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 17:26:42 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/28 19:00:25 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/29 20:08:32 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,6 +255,8 @@ int	main(int argc, char **argv)
 
 	while ((check = get_next_line(fd, &line)))
 	{
+		if (check == -1)
+			break;
 		printf("%s %d\n", line, check);
 		//free(line);
 		//line = NULL;

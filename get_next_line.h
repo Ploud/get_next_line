@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:30 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/28 19:52:32 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/30 17:17:49 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/stat.h>
 # include "libft.h"
 
-# define BUFF_SIZE 29
+# define BUFF_SIZE  61
 
 typedef struct		s_data
 {
@@ -31,7 +31,7 @@ typedef struct		s_data
 }					t_data;
 
 void				ft_free(int fd, t_data **l);
-int					ft_read_buf(int flag, char *buf, t_data **p);
+int					ft_read_buf(int flag, char *buf, t_data **p, int len);
 int					ft_reader(const int fd, t_data **p);
 t_data				*ft_set_p(const int fd, t_data **l);
 int					get_next_line(const int fd, char **line);
