@@ -6,12 +6,11 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:13 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/30 18:11:30 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/30 18:21:30 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 void	ft_free(int fd, t_data **l)
 {
