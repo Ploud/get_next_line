@@ -6,7 +6,7 @@
 /*   By: jsobel <jsobel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/25 15:04:13 by jsobel            #+#    #+#             */
-/*   Updated: 2018/05/30 18:21:30 by jsobel           ###   ########.fr       */
+/*   Updated: 2018/05/31 19:01:34 by jsobel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int		get_next_line(const int fd, char **line)
 	t_data			*p;
 	int				state;
 
-	if (!(p = ft_set_p(fd, &l)))
+	if (fd < 0 || !line || !(p = ft_set_p(fd, &l)))
 		return (-1);
 	if (p->line)
 		free(p->line);
